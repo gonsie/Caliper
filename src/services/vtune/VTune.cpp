@@ -61,7 +61,7 @@ public:
         std::string str = attr.name();
         
         if (attr.type() != CALI_TYPE_BOOL) {
-            str += value.to_string();
+            str += "=" + value.to_string();
         }
         
         __itt_string_handle* h = __itt_string_handle_create(str.c_str());            
