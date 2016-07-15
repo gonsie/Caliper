@@ -94,7 +94,7 @@ Attribute                trigger_end_attr   { Attribute::invalid };
 Attribute                trigger_set_attr   { Attribute::invalid };
 
 Attribute                trigger_level_attr { Attribute::invalid };
-
+Attribute                trigger_event_attr { Attribute::invalid };
     
 void pre_create_attribute_cb(Caliper* c, const std::string& name, cali_attr_type* type, int* prop)
 {
@@ -193,13 +193,19 @@ void event_begin_cb(Caliper* c, const Attribute& attr, const Variant& value)
 
         // Construct the trigger info entry
 
-        Attribute attrs[3] = { trigger_level_attr, trigger_begin_attr, event_attr.begin_attr };
-        Variant   vals[3]  = { v_lvl, Variant(attr.id()), value };
+        Attribute attrs[4] = { trigger_level_attr,
+                               trigger_begin_attr,
+                               event_attr.begin_attr,
+                               trigger_event_attr };
+        Variant   vals[4]  = { v_lvl,
+                               Variant(attr.id()),
+                               value,
+                               Variant(event_attr.begin_attr.id()) };
 
-        EntryList::FixedEntryList<3> trigger_info_data;
+        EntryList::FixedEntryList<4> trigger_info_data;
         EntryList trigger_info(trigger_info_data);
 
-        c->make_entrylist(3, attrs, vals, trigger_info);
+        c->make_entrylist(4, attrs, vals, trigger_info);
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, &trigger_info);
     } else {
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, nullptr);
@@ -223,13 +229,19 @@ void event_set_cb(Caliper* c, const Attribute& attr, const Variant& value)
 
         // Construct the trigger info entry
 
-        Attribute attrs[3] = { trigger_level_attr, trigger_set_attr, event_attr.set_attr };
-        Variant   vals[3]  = { v_lvl, Variant(attr.id()), value };
+        Attribute attrs[4] = { trigger_level_attr,
+                               trigger_set_attr,
+                               event_attr.set_attr,
+                               trigger_event_attr };
+        Variant   vals[4]  = { v_lvl,
+                               Variant(attr.id()),
+                               value,
+                               Variant(event_attr.set_attr.id()) };
 
-        EntryList::FixedEntryList<3> trigger_info_data;
+        EntryList::FixedEntryList<4> trigger_info_data;
         EntryList trigger_info(trigger_info_data);
 
-        c->make_entrylist(3, attrs, vals, trigger_info);
+        c->make_entrylist(4, attrs, vals, trigger_info);
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, &trigger_info);
     } else {
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, nullptr);
@@ -262,13 +274,19 @@ void event_end_cb(Caliper* c, const Attribute& attr, const Variant& value)
 
         // Construct the trigger info entry with previous level
 
-        Attribute attrs[3] = { trigger_level_attr, trigger_end_attr, event_attr.end_attr };
-        Variant   vals[3]  = { v_p_lvl, Variant(attr.id()), value };
+        Attribute attrs[4] = { trigger_level_attr,
+                               trigger_end_attr,
+                               event_attr.end_attr,
+                               trigger_event_attr };
+        Variant   vals[4]  = { v_p_lvl,
+                               Variant(attr.id()),
+                               value,
+                               Variant(event_attr.end_attr.id()) };
 
-        EntryList::FixedEntryList<3> trigger_info_data;
+        EntryList::FixedEntryList<4> trigger_info_data;
         EntryList trigger_info(trigger_info_data);
 
-        c->make_entrylist(3, attrs, vals, trigger_info);
+        c->make_entrylist(4, attrs, vals, trigger_info);
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, &trigger_info);
     } else {
         c->push_snapshot(CALI_SCOPE_THREAD | CALI_SCOPE_PROCESS, nullptr);
@@ -292,13 +310,15 @@ void event_trigger_register(Caliper* c)
 
     if (enable_snapshot_info) {
         trigger_begin_attr = 
-            c->create_attribute("cali.snapshot.event.begin", CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
+            c->create_attribute("cali.event.begin", CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
         trigger_set_attr = 
-            c->create_attribute("cali.snapshot.event.set",   CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
+            c->create_attribute("cali.event.set",   CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
         trigger_end_attr = 
-            c->create_attribute("cali.snapshot.event.end",   CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
+            c->create_attribute("cali.event.end",   CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
         trigger_level_attr = 
-            c->create_attribute("cali.snapshot.event.attr.level", CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
+            c->create_attribute("cali.event.attr.level", CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
+        trigger_event_attr = 
+            c->create_attribute("cali.event.attr",  CALI_TYPE_UINT, CALI_ATTR_SKIP_EVENTS);
     }
 
     // register callbacks

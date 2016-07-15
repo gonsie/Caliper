@@ -7,7 +7,7 @@
 #include <Log.h>
 #include <RuntimeConfig.h>
 
-#include "../filters/DefaultFilter.h"
+#include "../../common/filters/DefaultFilter.h"
 
 namespace cali {
 

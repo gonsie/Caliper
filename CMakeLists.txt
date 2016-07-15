@@ -16,6 +16,8 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 include(FindLibunwind)
 include(FindPAPI)
 include(FindLibcurl)
+include(FindVTune)
+
 # Optional Fortran
 option(WITH_FORTRAN "Install Fortran interface and build test programs")
 
@@ -58,6 +60,12 @@ endif()
 if (PAPI_FOUND)
   set(CALIPER_HAVE_PAPI TRUE)
   list(APPEND CALIPER_EXTERNAL_LIBS ${PAPI_LIBRARIES})
+endif()
+
+# Find VTune
+if (VTune_FOUND)
+  set(CALIPER_HAVE_VTUNE TRUE)
+  list(APPEND CALIPER_EXTERNAL_LIBS ${VTune_LIBRARIES} dl)
 endif()
 
 # Find Mitos

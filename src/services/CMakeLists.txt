@@ -70,6 +70,9 @@ endif()
 if (OMPT_FOUND)
   add_subdirectory(ompt)
 endif()
+if (CALIPER_HAVE_VTUNE)
+  add_subdirectory(vtune)
+endif()
 
 add_service_sources(Services.cpp)
 
