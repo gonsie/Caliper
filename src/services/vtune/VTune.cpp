@@ -35,7 +35,7 @@
 
 #include "../CaliperService.h"
 
-#include <filters/RegexFilter.h>
+#include <filters/DefaultFilter.h>
 
 #include "../common/ToolWrapper.h"
 
@@ -44,7 +44,7 @@
 namespace cali
 {
     
-class VTuneWrapper : public ToolWrapper<VTuneWrapper, RegexFilter> {
+class VTuneWrapper : public ToolWrapper<VTuneWrapper, DefaultFilter> {
 public:
 
     static __itt_domain* cali_domain;
